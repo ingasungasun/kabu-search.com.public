@@ -1,0 +1,6 @@
+- name: Ensure su is not runnable except sudo group
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/su
+    regexp: "^auth required pam_wheel.so group=sudo$"
+    line: "auth required pam_wheel.so group=sudo"
+  become: true

@@ -1,0 +1,31 @@
+- block:
+    - name: Ensure sysstat is installed
+      ansible.builtin.apt:
+        name:
+          - sysstat
+        update_cache: true
+
+    - name: Ensure sysstat is started and enabled on boot
+      ansible.builtin.systemd_service:
+        name: sysstat
+        state: started
+        enabled: true
+
+    - name: Fetch conf files
+      ansible.builtin.fetch:
+        src: "{{ item }}"
+        dest: "{{ remote_path }}"
+      loop:
+        - /etc/default/sysstat
+        - /etc/sysstat/sysstat
+
+    - name: Ensure sysstat runs every minute
+      ansible.builtin.lineinfile:
+        path: /usr/lib/systemd/system/sysstat-collect.timer
+        regexp: "^OnCalendar"
+        line: "OnCalendar=*:00/1"
+
+    - name: Reload daemon
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+  become: true

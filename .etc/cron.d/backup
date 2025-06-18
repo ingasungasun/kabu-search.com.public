@@ -1,0 +1,2 @@
+56 23 * * * root docker container exec mysql    /var/www/.sh/mysql/backup.sh        > /dev/null 2>&1
+57 23 * * * root                                /var/www/.sh/documents/backup.sh    > /dev/null 2>&1

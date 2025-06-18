@@ -1,0 +1,17 @@
+- name: Restart postfix
+  ansible.builtin.systemd_service:
+    name: postfix
+    state: restarted
+  become: true
+
+- name: newaliases
+  command: newaliases
+  become: true
+
+- name: sender_access
+  command: postmap /etc/postfix/sender_access
+  become: true
+
+- name: sender_login
+  command: postmap /etc/postfix/sender_login
+  become: true

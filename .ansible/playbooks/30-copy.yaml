@@ -1,0 +1,13 @@
+# バックアップファイル名は以下の通りに変更すること
+# - db.gz
+# - documents.tar.gz
+
+- hosts: all
+  roles:
+    - copy/dkimkeys
+    - copy/documents
+    - copy/env
+    - copy/initdb
+    - copy/nse-html
+    - copy/secrets
+    - copy/sitemap

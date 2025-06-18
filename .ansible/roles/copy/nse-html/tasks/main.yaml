@@ -1,0 +1,8 @@
+- name: Ensure nse.html file exists
+  ansible.builtin.copy:
+    src: "{{ project_path }}/.storage/files/nse.html"
+    dest: "{{ project_path }}/.storage/files/nse.html"
+    owner: shbtnt
+    group: shbtnt
+    mode: "644"
+  become: true

@@ -1,0 +1,17 @@
+- block:
+    - name: Ensure git is installed
+      ansible.builtin.apt:
+        name:
+          - git
+        update_cache: true
+
+    - include_tasks: config.yaml
+      loop: "{{ git_users | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}"
+
+    - include_tasks: credentials.yaml
+      loop: "{{ git_users | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}"
+  become: true

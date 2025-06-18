@@ -1,0 +1,21 @@
+- block:
+    - name: Ensure default/sysstat exists
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.etc/default/sysstat"
+        dest: /etc/default/sysstat
+        owner: root
+        group: root
+        mode: "644"
+      notify:
+        - Restart sysstat
+
+    - name: Ensure sysstat/sysstat exists
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.etc/sysstat/sysstat"
+        dest: /etc/sysstat/sysstat
+        owner: root
+        group: root
+        mode: "644"
+      notify:
+        - Restart sysstat
+  become: true

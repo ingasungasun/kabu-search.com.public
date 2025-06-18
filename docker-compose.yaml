@@ -1,0 +1,176 @@
+name: kabu_search
+
+secrets:
+  mysql_root_password:
+    file: ./.secrets/docker/mysql_root_password.txt
+
+volumes:
+  mysql:
+  node_modules:
+
+services:
+  mysql:
+    build:
+      context: ./
+      dockerfile: ./.docker/mysql/Dockerfile
+      args:
+        IMAGE: mysql:${DOCKER_MYSQL_TAG}
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: kabu_search
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      TZ: Asia/Tokyo
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    restart: unless-stopped
+    secrets:
+      - mysql_root_password
+    volumes:
+      - type: volume
+        source: mysql
+        target: /var/lib/mysql
+
+      - type: bind
+        source: ./
+        target: /var/www
+
+      - type: bind
+        source: ./.docker/mysql/docker-entrypoint-initdb.d
+        target: /docker-entrypoint-initdb.d
+    working_dir: /var/www
+
+  python:
+    build:
+      context: ./
+      dockerfile: ./.docker/python/Dockerfile
+      args:
+        IMAGE: python:${DOCKER_PYTHON_TAG}
+    container_name: python
+    command: ["/var/www/.python/schedule/${DOCKER_PYTHON_SCHEDULE_FILE}.py"]
+    depends_on:
+      - mysql
+    environment:
+      TZ: Asia/Tokyo
+      PYTHONPATH: /var/www/.python:/var/www/.secrets/python
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: ./
+        target: /var/www
+    working_dir: /var/www/.python/scripts
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./.docker/node/Dockerfile
+      args:
+        IMAGE: node:${DOCKER_NODE_TAG}
+    container_name: app
+    command: ["npm", "run", "${DOCKER_NPM_COMMAND_ARG}"]
+    depends_on:
+      - mysql
+    environment:
+      TZ: Asia/Tokyo
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: node_modules
+        target: /var/www/node_modules
+
+      - type: bind
+        source: ./
+        target: /var/www
+    working_dir: /var/www
+
+  builder:
+    image: node:${DOCKER_NODE_TAG}
+    container_name: builder
+    environment:
+      TZ: Asia/Tokyo
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    restart: "no"
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: volume
+        source: node_modules
+        target: /var/www/node_modules
+
+      - type: bind
+        source: ./
+        target: /var/www
+    working_dir: /var/www
+
+  phpmyadmin:
+    image: phpmyadmin:${DOCKER_PHPMYADMIN_TAG}
+    container_name: phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD_FILE: /run/secrets/mysql_root_password
+      TZ: Asia/Tokyo
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    restart: unless-stopped
+    secrets:
+      - mysql_root_password
+    working_dir: /var/www/html
+
+  nginx:
+    image: nginx:${DOCKER_NGINX_TAG}
+    container_name: nginx
+    depends_on:
+      - app
+      - phpmyadmin
+    environment:
+      TZ: Asia/Tokyo
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: ./
+        target: /var/www
+
+      - type: bind
+        source: ./.etc/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+
+      - type: bind
+        source: ./.etc/nginx/conf.d
+        target: /etc/nginx/conf.d
+
+      - type: bind
+        source: ./.etc/nginx/sites-available/${DOCKER_NGINX_CONFIG_FILE}.conf
+        target: /etc/nginx/sites-enabled/${DOCKER_NGINX_CONFIG_FILE}.conf
+    working_dir: /var/www

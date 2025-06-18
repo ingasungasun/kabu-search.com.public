@@ -1,0 +1,84 @@
+PL:
+  - 売上高: net_sales
+  - 売上原価: cost_of_sales
+  - 売上総利益: gross_profit
+
+  - 販売費及び一般管理費: sga
+  - 営業利益: operating_income
+
+  - 営業外収益: non_operating_income
+  - 営業外費用: non_operating_expenses
+  - 経常利益: ordinary_income
+  
+  - 特別利益: extraordinary_income
+  - 特別損失: extraordinary_loss
+  - 税引前利益: profit_loss_before_tax
+  - 当期純利益: profit_loss
+  - 親会社株主に帰属する当期純利益: profit_loss_attributable_to_owners_of_parent
+
+BS:
+  - 資産: assets
+  - 流動資産: current_assets
+  - 現金及び預金: cash_and_deposits
+  - 売上債権（受取手形及び売掛金）: notes_and_accounts_receivable
+  - 棚卸資産: inventories
+  - 固定資産: non_current_assets
+
+  - 負債: liabilities
+  - 流動負債: current_liabilities
+  - 仕入債務（支払手形及び買掛金）: notes_and_accounts_payable
+  - 有利子負債: interest_bearing_liabilities
+  - 固定負債: non_current_liabilities
+
+  - 純資産: net_assets
+  - 資本金: share_capital
+  - 資本剰余金: capital_surplus
+  - 利益剰余金: retained_earnings
+  - 自己株式: treasury_shares
+  - 非支配株主持分: non_controlling_interests
+
+CF:
+  - 営業キャッシュフロー: operating_cash_flow
+  - 投資キャッシュフロー: investing_cash_flow
+  - 財務キャッシュフロー: financing_cash_flow
+  - フリーキャッシュフロー: free_cash_flow
+
+割安性:
+  - PER: per
+  - PBR: pbr
+  - EPS: eps
+  - BPS: bps
+
+収益性:
+  - ROE: roe
+  - ROA: roa
+  - 売上総利益率: gross_profit_margin
+  - 営業利益率: operating_income_margin
+  - 経常利益率: ordinary_income_margin
+  - 当期純利益率: profit_loss_margin
+  - 1人当たり売上高: net_sales_per_employee
+  - 1人当たり純利益: profit_loss_per_employee
+
+安全性:
+  - 流動比率: current_ratio
+  - 当座比率: quick_ratio
+  - 現金比率: cash_ratio
+  - 固定比率: fixed_ratio
+  - 固定長期適合率: fixed_long_term_conformity_ratio
+  - 自己資本比率: equity_to_asset_ratio
+
+回転性:
+  - 総資本回転率: total_asset_turnover
+  - 売上債権回転期間: receivables_turnover
+  - 仕入債務回転期間: payables_turnover
+  - 棚卸資産回転期間: inventories_turnover
+
+配当:
+  - 1株当たり配当: dividend_paid_per_share
+  - 配当性向: dividend_payout_ratio
+  - 株主資本配当率: dividend_on_equity
+  - 配当利回り: dividend_yield
+
+その他:
+  - 発行済株式数: issued_shares
+  - 従業員数: number_of_employees

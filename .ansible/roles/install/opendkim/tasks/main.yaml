@@ -1,0 +1,21 @@
+- block:
+    - name: Ensure opendkim is installed
+      ansible.builtin.apt:
+        name:
+          - opendkim
+          - opendkim-tools
+        update_cache: true
+
+    - name: Ensure opendkim is started and enabled on boot
+      ansible.builtin.systemd_service:
+        name: opendkim
+        state: started
+        enabled: true
+
+    - name: Fetch conf files
+      ansible.builtin.fetch:
+        src: "{{ item }}"
+        dest: "{{ remote_path }}"
+      loop:
+        - /etc/opendkim.conf
+  become: true

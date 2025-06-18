@@ -1,0 +1,6 @@
+- name: Ensure dstat is installed
+  ansible.builtin.apt:
+    name:
+      - dstat
+    update_cache: true
+  become: true

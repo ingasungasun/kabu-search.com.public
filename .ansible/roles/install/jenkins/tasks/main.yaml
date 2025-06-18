@@ -1,0 +1,36 @@
+- block:
+    - name: Ensure keyrings dir exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "755"
+
+    - name: Ensure jenkins's official GPG key is added
+      ansible.builtin.get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        dest: /etc/apt/keyrings/jenkins-keyring.asc
+        mode: "644"
+
+    - name: Ensure jenkins repository is added
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
+
+    - name: Ensure jenkins is installed
+      ansible.builtin.apt:
+        name:
+          - jenkins
+        update_cache: true
+
+    - name: Ensure jenkins is started and enabled on boot
+      ansible.builtin.systemd_service:
+        name: jenkins
+        state: started
+        enabled: true
+
+    - name: Ensure users belong to jenkins group
+      ansible.builtin.user:
+        name: "{{ item }}"
+        groups: jenkins
+        append: true
+      loop: "{{ jenkins_users }}"
+  become: true

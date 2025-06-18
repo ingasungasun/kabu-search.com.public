@@ -1,0 +1,33 @@
+- hosts: all
+  tasks:
+    - name: Check if specified file exists
+      ansible.builtin.stat:
+        path: "{{ file_path }}"
+      register: target_file
+
+    - name: Fetch target file
+      ansible.builtin.fetch:
+        src: "{{ file_path }}"
+        dest: "{{ remote_path }}"
+      when: target_file.stat.exists == true
+
+    - block:
+        - name: Set backup_files variable
+          ansible.builtin.command: ls {{ backup_path }}
+          register: backup_files
+
+        - name: Show backup_files variable
+          ansible.builtin.debug:
+            var: backup_files.stdout_lines
+
+        - name: Throw an exception
+          ansible.builtin.fail:
+            msg: "{{ file_path }} doesn't exist."
+      when: target_file.stat.exists == false
+  vars_prompt:
+    - name: date
+      prompt: What date? (YYYY-MM-DD)
+      private: false
+  vars:
+    backup_path: "{{ project_path }}/.storage/backup"
+    file_path: "{{ backup_path }}/documents.{{ date }}.tar.gz"

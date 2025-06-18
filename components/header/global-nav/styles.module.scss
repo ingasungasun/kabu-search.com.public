@@ -1,0 +1,24 @@
+@use "@/styles/mixins.scss";
+
+.root {
+  position: relative;
+}
+
+.scroller {
+  @include mixins.noScrollbar();
+  overflow-x: scroll;
+}
+
+.navigate {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -15px;
+  pointer-events: none;
+  transition: opacity 150ms;
+
+  &:not(.visible) {
+    opacity: 0;
+  }
+}

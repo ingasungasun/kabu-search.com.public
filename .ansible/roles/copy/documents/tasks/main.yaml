@@ -1,0 +1,10 @@
+- name: Ensure documents dir exists
+  ansible.builtin.unarchive:
+    src: "{{ project_path }}/.storage/backup/{{ file_name }}"
+    dest: "{{ project_path }}/.storage"
+    owner: shbtnt
+    group: shbtnt
+    mode: "755"
+  vars:
+    file_name: documents.tar.gz
+  become: true

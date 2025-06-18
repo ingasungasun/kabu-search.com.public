@@ -1,0 +1,15 @@
+- name: Ensure {{ project_path }} dir exists
+  ansible.builtin.file:
+    path: "{{ project_path }}"
+    state: directory
+    owner: shbtnt
+    group: shbtnt
+    mode: "755"
+  become: true
+
+- name: Ensure repository is deployed
+  ansible.builtin.git:
+    repo: https://github.com/ingasungasun/kabu-search.com.git
+    dest: "{{ project_path }}"
+  become: true
+  become_user: shbtnt

@@ -1,0 +1,5 @@
+alias ll='ls -AlFh'
+alias www='cd /var/www'
+alias storage='cd /var/www/.storage'
+alias log='cd /var/www/.storage/logs'
+alias backup='cd /var/www/.storage/backup'

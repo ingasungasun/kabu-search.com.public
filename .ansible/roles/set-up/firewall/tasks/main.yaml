@@ -1,0 +1,19 @@
+- block:
+    - name: Ensure default incoming is denied
+      community.general.ufw:
+        default: deny
+        direction: incoming
+
+    - name: Ensure default outgoing is allowed
+      community.general.ufw:
+        default: allow
+        direction: outgoing
+
+    - name: Ensure specified ports are allowed
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+      loop: "{{ allowed_ports }}"
+  become: true
+  notify:
+    - Reload firewall

@@ -1,0 +1,44 @@
+- block:
+    - name: Ensure conf files exist
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.etc/postfix/{{ item }}"
+        dest: /etc/postfix/{{ item }}
+        owner: root
+        group: root
+        mode: "644"
+      loop:
+        - main.cf
+        - master.cf
+      notify:
+        - Restart postfix
+
+    - name: Ensure aliases exists
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.etc/aliases"
+        dest: /etc/aliases
+        owner: root
+        group: root
+        mode: "644"
+      notify:
+        - newaliases
+
+    - name: Ensure sender_access exists
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.etc/postfix/sender_access"
+        dest: /etc/postfix/sender_access
+        owner: root
+        group: root
+        mode: "644"
+      notify:
+        - sender_access
+
+    - name: Ensure sender_login exists
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.etc/postfix/sender_login"
+        dest: /etc/postfix/sender_login
+        owner: root
+        group: root
+        mode: "644"
+      notify:
+        - sender_login
+  become: true

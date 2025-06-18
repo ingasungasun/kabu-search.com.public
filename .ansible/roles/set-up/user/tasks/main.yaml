@@ -1,0 +1,29 @@
+- name: Ensure users are present
+  ansible.builtin.user:
+    name: "{{ item.key }}"
+    groups: "{{ item.value.groups }}"
+    shell: "{{ item.value.shell }}"
+    password: "{{ item.value.password | password_hash('sha512') }}"
+  loop: "{{ users | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  become: true
+
+- include_tasks: setting.yaml
+  loop: "{{ users | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: not item.key == "root"
+
+- include_tasks: ssh.yaml
+  loop: "{{ users | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: not item.key == "root" and item.value.generate_ssh_key == true
+
+- name: Ensure root's force_color_prompt is "yes"
+  ansible.builtin.lineinfile:
+    path: /root/.bashrc
+    regexp: "^#?force_color_prompt"
+    line: "force_color_prompt=yes"
+  become: true

@@ -1,0 +1,6 @@
+/.git/
+/.next/
+/.ruff_cache/
+/.storage/
+/node_modules/
+/package-lock.json

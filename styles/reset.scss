@@ -1,0 +1,22 @@
+html,
+body {
+  background: #fff;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+input,
+select {
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+  background: #fff;
+  color: #555;
+  font-size: 95%;
+  font-family: "Roboto", sans-serif;
+}
+
+select {
+  cursor: pointer;
+}

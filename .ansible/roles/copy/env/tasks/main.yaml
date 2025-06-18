@@ -1,0 +1,27 @@
+- block:
+    - name: Ensure .env file exists
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.env"
+        dest: "{{ project_path }}/.env"
+        owner: shbtnt
+        group: shbtnt
+        mode: "644"
+
+    - name: Ensure DOCKER_NPM_COMMAND_ARG is "start"
+      ansible.builtin.lineinfile:
+        path: "{{ project_path }}/.env"
+        regexp: "^DOCKER_NPM_COMMAND_ARG"
+        line: "DOCKER_NPM_COMMAND_ARG=start"
+
+    - name: Ensure DOCKER_PYTHON_SCHEDULE_FILE is "prod"
+      ansible.builtin.lineinfile:
+        path: "{{ project_path }}/.env"
+        regexp: "^DOCKER_PYTHON_SCHEDULE_FILE"
+        line: "DOCKER_PYTHON_SCHEDULE_FILE=prod"
+
+    - name: Ensure DOCKER_NGINX_CONFIG_FILE is "prod"
+      ansible.builtin.lineinfile:
+        path: "{{ project_path }}/.env"
+        regexp: "^DOCKER_NGINX_CONFIG_FILE"
+        line: "DOCKER_NGINX_CONFIG_FILE=prod"
+  become: true

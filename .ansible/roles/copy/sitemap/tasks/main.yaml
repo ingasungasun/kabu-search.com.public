@@ -1,0 +1,8 @@
+- name: Ensure sitemap.xml file exists
+  ansible.builtin.copy:
+    src: "{{ project_path }}/public/sitemap.xml"
+    dest: "{{ project_path }}/public/sitemap.xml"
+    owner: shbtnt
+    group: shbtnt
+    mode: "644"
+  become: true

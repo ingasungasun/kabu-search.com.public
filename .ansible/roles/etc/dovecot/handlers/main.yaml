@@ -1,0 +1,5 @@
+- name: Restart dovecot
+  ansible.builtin.systemd_service:
+    name: dovecot
+    state: restarted
+  become: true

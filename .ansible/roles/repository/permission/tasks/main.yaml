@@ -1,0 +1,21 @@
+- name: Ensure directories are 755
+  ansible.builtin.command: find {{ project_path }} -not -path "*/.git*" -type d -exec chmod 0755 {} \;
+
+- name: Ensure files are 644
+  ansible.builtin.command: find {{ project_path }} -not -path "*/.git*" -type f -exec chmod 0644 {} \;
+
+- name: Ensure shell scripts are 755
+  ansible.builtin.command: find {{ project_path }}/.sh -name "*.sh" -type f -exec chmod 0755 {} \;
+
+- name: Ensure python scripts are 755
+  ansible.builtin.command: find {{ project_path }}/.python -name "*.py" -type f -exec chmod 0755 {} \;
+
+- name: Ensure {{ project_path }}/.storage/backup is 777
+  ansible.builtin.file:
+    path: "{{ project_path }}/.storage/backup"
+    mode: "777"
+
+- name: Ensure {{ project_path }}/.storage/logs is 777
+  ansible.builtin.file:
+    path: "{{ project_path }}/.storage/logs"
+    mode: "777"

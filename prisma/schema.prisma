@@ -1,0 +1,216 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("PRISMA_URL")
+}
+
+model Contact {
+  id         Int      @id @default(autoincrement())
+  email      String   @db.VarChar(255)
+  subject    String   @db.VarChar(255)
+  text       String   @db.Text
+  user_agent String   @db.Text
+  ip_address String   @db.VarChar(255)
+  is_sent    Boolean
+  created_at DateTime @db.DateTime(0)
+
+  @@map("contacts")
+}
+
+model EdinetDocument {
+  id                     Int            @id @default(autoincrement())
+  file_date              DateTime       @db.Date
+  seq_number             Int
+  doc_id                 String?        @db.Char(8)
+  edinet_code            String?        @db.Char(6)
+  sec_code               String?        @db.Char(5)
+  jcn                    String?        @db.Char(13)
+  filer_name             String?        @db.VarChar(128)
+  fund_code              String?        @db.Char(6)
+  ordinance_code         String?        @db.Char(3)
+  form_code              String?        @db.Char(6)
+  doc_type_code          String?        @db.Char(3)
+  period_start           DateTime?      @db.Date
+  period_end             DateTime?      @db.Date
+  submit_datetime        DateTime?      @db.DateTime(0)
+  doc_description        String?        @db.VarChar(147)
+  issuer_edinet_code     String?        @db.Char(6)
+  subject_edinet_code    String?        @db.Char(6)
+  subsidiary_edinet_code String?        @db.VarChar(69)
+  current_report_reason  String?        @db.VarChar(1000)
+  parent_doc_id          String?        @db.Char(8)
+  ope_datetime           DateTime?      @db.DateTime(0)
+  withdrawal_status      Int            @default(0) @db.TinyInt
+  doc_info_edit_status   Int            @default(0) @db.TinyInt
+  disclosure_status      Int            @default(0) @db.TinyInt
+  xbrl_flag              Boolean        @default(false)
+  pdf_flag               Boolean        @default(false)
+  attach_doc_flag        Boolean        @default(false)
+  english_doc_flag       Boolean        @default(false)
+  csv_flag               Boolean        @default(false)
+  legal_status           Int            @default(0) @db.TinyInt
+  needs_to_analyze       Boolean        @default(false)
+  EdinetMetadata         EdinetMetadata @relation(fields: [file_date], references: [file_date], onDelete: Cascade, onUpdate: Restrict, map: "FK__edinet_documents__file_date")
+
+  @@unique([file_date, seq_number], map: "UNIQUE__file_date__seq_number")
+  @@index([doc_id], map: "INDEX__doc_id")
+  @@index([edinet_code], map: "INDEX__edinet_code")
+  @@index([fund_code], map: "INDEX__fund_code")
+  @@index([needs_to_analyze], map: "INDEX__needs_to_analyze")
+  @@map("edinet_documents")
+}
+
+model EdinetMetadata {
+  id              Int              @id @default(autoincrement())
+  file_date       DateTime         @unique(map: "UNIQUE__file_date") @db.Date
+  count           Int
+  checked_at      DateTime         @db.DateTime(0)
+  EdinetDocuments EdinetDocument[]
+
+  @@index([checked_at], map: "INDEX__checked_at")
+  @@map("edinet_metadata")
+}
+
+model MasterReportStandard {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique(map: "UNIQUE__name") @db.VarChar(255)
+  Reports Report[]
+
+  @@map("master_report_standards")
+}
+
+model MasterStockIndustry {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique(map: "UNIQUE__name") @db.VarChar(255)
+  Stocks Stock[]
+
+  @@map("master_stock_industries")
+}
+
+model MasterStockMarket {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique(map: "UNIQUE__name") @db.VarChar(255)
+  Stocks Stock[]
+
+  @@map("master_stock_markets")
+}
+
+model Report {
+  id                                                    Int                  @id @default(autoincrement())
+  doc_id                                                String               @unique(map: "UNIQUE__doc_id") @db.Char(8)
+  ticker                                                String               @db.Char(4)
+  ordinance_code                                        String               @db.Char(3)
+  form_code                                             String               @db.Char(6)
+  period_start                                          DateTime             @db.Date
+  period_end                                            DateTime             @db.Date
+  standard                                              String               @default("JGAAP") @db.VarChar(255)
+  is_consolidated                                       Boolean              @default(false)
+  is_newest                                             Boolean              @default(false)
+  net_sales                                             BigInt?
+  cost_of_sales                                         BigInt?
+  gross_profit                                          BigInt?
+  sga                                                   BigInt?
+  operating_income                                      BigInt?
+  non_operating_income                                  BigInt?
+  non_operating_expenses                                BigInt?
+  ordinary_income                                       BigInt?
+  extraordinary_income                                  BigInt?
+  extraordinary_loss                                    BigInt?
+  profit_loss_before_tax                                BigInt?
+  income_tax                                            BigInt?
+  profit_loss                                           BigInt?
+  income_before_minority_interests                      BigInt?
+  profit_loss_attributable_to_owners_of_parent          BigInt?
+  profit_loss_attributable_to_non_controlling_interests BigInt?
+  actual_profit_loss                                    BigInt?
+  net_sales_growth_rate                                 Float?               @db.Float
+  profit_loss_growth_rate                               Float?               @db.Float
+  assets                                                BigInt?
+  current_assets                                        BigInt?
+  cash_and_deposits                                     BigInt?
+  notes_and_accounts_receivable                         BigInt?
+  inventories                                           BigInt?
+  non_current_assets                                    BigInt?
+  liabilities                                           BigInt?
+  current_liabilities                                   BigInt?
+  notes_and_accounts_payable                            BigInt?
+  non_current_liabilities                               BigInt?
+  net_assets                                            BigInt?
+  share_capital                                         BigInt?
+  capital_surplus                                       BigInt?
+  retained_earnings                                     BigInt?
+  treasury_shares                                       BigInt?
+  equity_attributable_to_owners_of_parent               BigInt?
+  non_controlling_interests                             BigInt?
+  operating_cash_flow                                   BigInt?
+  investing_cash_flow                                   BigInt?
+  financing_cash_flow                                   BigInt?
+  free_cash_flow                                        BigInt?
+  per                                                   Float?               @db.Float
+  pbr                                                   Float?               @db.Float
+  eps                                                   Float?               @db.Float
+  bps                                                   Float?               @db.Float
+  roe                                                   Float?               @db.Float
+  roa                                                   Float?               @db.Float
+  gross_profit_margin                                   Float?               @db.Float
+  operating_income_margin                               Float?               @db.Float
+  ordinary_income_margin                                Float?               @db.Float
+  profit_loss_margin                                    Float?               @db.Float
+  net_sales_per_employee                                BigInt?
+  profit_loss_per_employee                              BigInt?
+  current_ratio                                         Float?               @db.Float
+  quick_ratio                                           Float?               @db.Float
+  cash_ratio                                            Float?               @db.Float
+  fixed_ratio                                           Float?               @db.Float
+  fixed_long_term_conformity_ratio                      Float?               @db.Float
+  equity_to_asset_ratio                                 Float?               @db.Float
+  total_asset_turnover                                  Float?               @db.Float
+  receivables_turnover                                  Float?               @db.Float
+  payables_turnover                                     Float?               @db.Float
+  inventories_turnover                                  Float?               @db.Float
+  dividend_paid_per_share                               Float?               @db.Float
+  payout_ratio                                          Float?               @db.Float
+  dividend_on_equity                                    Float?               @db.Float
+  dividend_yield                                        Float?               @db.Float
+  issued_shares                                         BigInt?
+  number_of_employees                                   Int?
+  MasterReportStandard                                  MasterReportStandard @relation(fields: [standard], references: [name], map: "FK__reports__standard")
+  Stock                                                 Stock                @relation(fields: [ticker], references: [ticker], onDelete: Cascade, onUpdate: Restrict, map: "FK__reports__ticker")
+
+  @@index([ticker], map: "INDEX__ticker")
+  @@index([standard], map: "FK__reports__standard")
+  @@index([period_end, id], map: "INDEX__period_end__id")
+  @@index([is_newest], map: "INDEX__is_newest")
+  @@map("reports")
+}
+
+model Stock {
+  id                  Int                 @id @default(autoincrement())
+  edinet_code         String              @default("") @db.Char(6)
+  fund_code           String              @default("") @db.Char(6)
+  ticker              String              @unique(map: "UNIQUE__ticker") @db.Char(4)
+  market              String              @db.VarChar(255)
+  division            String              @db.VarChar(255)
+  name                String              @db.VarChar(255)
+  full_name           String              @default("") @db.VarChar(255)
+  english_name        String              @default("") @db.VarChar(255)
+  kana_name           String              @default("") @db.VarChar(255)
+  address             String              @default("") @db.VarChar(255)
+  industry            String              @default("") @db.VarChar(255)
+  scale               String              @default("") @db.VarChar(255)
+  closing_date        String              @default("") @db.VarChar(255)
+  is_foreign          Boolean             @default(false)
+  website             String              @default("") @db.VarChar(255)
+  Reports             Report[]
+  MasterStockIndustry MasterStockIndustry @relation(fields: [industry], references: [name], map: "FK__stocks__industry")
+  MasterStockMarket   MasterStockMarket   @relation(fields: [market], references: [name], map: "FK__stocks__market")
+
+  @@index([market], map: "FK__stocks__market")
+  @@index([edinet_code], map: "INDEX__edinet_code")
+  @@index([fund_code], map: "INDEX__fund_code")
+  @@index([industry], map: "FK__stocks__industry")
+  @@map("stocks")
+}

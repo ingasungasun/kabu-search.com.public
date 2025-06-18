@@ -1,0 +1,125 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+# See http://www.postfix.org/COMPATIBILITY_README.html -- default to 3.6 on
+# fresh installs.
+compatibility_level = 3.6
+
+# The internet hostname of this mail system.
+# The default is to use the fully-qualified domain name (FQDN) from gethostname(),
+# or to use the non-FQDN result from gethostname() and append ".$mydomain".
+# $myhostname is used as a default value for many other configuration parameters.
+myhostname = mail.kabu-search.com
+
+# The internet domain name of this mail system.
+# The default is to use $myhostname minus the first component,
+# or "localdomain" (Postfix 2.3 and later).
+# $mydomain is used as a default value for many other configuration parameters.
+mydomain = kabu-search.com
+
+# The domain name that locally-posted mail appears to come from,
+# and that locally posted mail is delivered to.
+# The default, $myhostname, is adequate for small sites.
+myorigin = $myhostname
+
+# The list of domains that are delivered via the $local_transport mail delivery transport.
+# By default this is the Postfix local(8) delivery agent
+# which looks up all recipientsin /etc/passwd and /etc/aliases.
+# The SMTP server validates recipient addresses with $local_recipient_maps
+# and rejects non-existent recipients.
+# See also the local domain class in the ADDRESS_CLASS_README file.
+mydestination = $myhostname, $mydomain, localhost
+
+# What destination domains (and subdomains thereof) this system will relay mail to.
+relay_domains = 
+
+# The list of "trusted" remote SMTP clients that have more privileges than "strangers".
+# In particular, "trusted" SMTP clients are allowed to relay mail through Postfix.
+# See the smtpd_relay_restrictions parameter description in the postconf(5) manual.
+mynetworks = 127.0.0.0/8
+
+# Optional lookup tables that are searched only with an email address localpart (no domain)
+# and that apply only to local(8) recipients
+alias_maps = hash:/etc/aliases
+
+# The alias databases for local(8) delivery that are updated with "newaliases" or with "sendmail -bi".
+alias_database = $alias_maps
+
+# Optional pathname of a mailbox file relative to a local(8) user's home directory.
+# Specify a pathname ending in "/" for qmail-style delivery.
+home_mailbox = Maildir/
+
+# The text that follows the 220 status code in the SMTP greeting banner.
+# Some people like to see the mail version advertised.
+# By default, Postfix shows no version.
+# You MUST specify $myhostname at the start of the text.
+# This is required by the SMTP protocol.
+smtpd_banner = $myhostname ESMTP
+
+# Whether or not to use the local biff service.
+# This service sends "new mail" notifications to users
+# who have requested new mail notification with the UNIX command "biff y".
+# For compatibility reasons this feature is on by default.
+# On systems with lots of interactive users,
+# the biff service can be a performance drain.
+# Specify "biff = no" in main.cf to disable.
+biff = no
+
+# Disable the SMTP VRFY command.
+# This stops some techniques used to harvest email addresses.
+disable_vrfy_command = yes
+
+# The maximal size in bytes of a message, including envelope information.
+# The value cannot exceed LONG_MAX (typically, a 32-bit or 64-bit signed integer).
+message_size_limit = 10485760
+
+# The maximal size of any local(8) individual mailbox or maildir file, or zero (no limit).
+# In fact, this limits the size of any file that is written to upon local delivery,
+# including files written by external commands that are executed by the local(8) delivery agent.
+# The value cannot exceed LONG_MAX (typically, a 32-bit or 64-bit signed integer).
+mailbox_size_limit = 1073741824
+
+# The maximal number of recipients
+# that the Postfix SMTP server accepts per message delivery request.
+smtpd_recipient_limit = 1
+
+#-------------------------
+# restrictions
+# See SMTPD_ACCESS_README
+#-------------------------
+smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+smtpd_sender_restrictions = check_sender_access hash:/etc/postfix/sender_access, reject_authenticated_sender_login_mismatch
+smtpd_sender_login_maps = hash:/etc/postfix/sender_login
+
+#-------------------------
+# TLS
+# See TLS_README
+#-------------------------
+# Postfix SMTP client
+# 送信先サーバがTLSに対応している場合は、TLSによる通信が行われる
+smtp_tls_security_level = may
+smtp_tls_CApath = /etc/ssl/certs
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+# Postfix SMTP server
+# 送信元サーバあるいはメールクライアントがTLSに対応している場合は、TLSによる通信が行われる
+smtpd_tls_security_level = may
+smtpd_tls_CApath = /etc/ssl/certs
+smtpd_tls_chain_files = /var/www/.secrets/lego/certificates/kabu-search.com.key, /var/www/.secrets/lego/certificates/kabu-search.com.crt
+smtpd_tls_protocols = !SSLv2, !SSLv3, !TLSv1, !TLSv1.1
+
+#-------------------------
+# SMTP-Auth
+# See SASL_README
+#-------------------------
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_local_domain = $myhostname
+
+#-------------------------
+# milter
+# See MILTER_README
+#-------------------------
+smtpd_milters = inet:localhost:8891
+non_smtpd_milters = $smtpd_milters
+milter_default_action = accept

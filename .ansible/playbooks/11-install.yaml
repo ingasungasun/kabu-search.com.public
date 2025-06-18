@@ -1,0 +1,13 @@
+- hosts: all
+  roles:
+    - install/openjdk-21-jre
+    - install/jenkins
+    - install/docker
+    - install/dovecot
+    - install/dstat
+    - install/git
+    - install/net-tools
+    - install/opendkim
+    - install/postfix
+    - install/sysstat
+  gather_facts: true

@@ -1,0 +1,8 @@
+- hosts: all
+  roles:
+    - etc/cron
+    - etc/dovecot
+    - etc/logrotate
+    - etc/opendkim
+    - etc/postfix
+    - etc/sysstat
