@@ -1,0 +1,4 @@
+- name: Reload firewall
+  community.general.ufw:
+    state: enabled
+  become: true

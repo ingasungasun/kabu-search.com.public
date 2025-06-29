@@ -1,0 +1,13 @@
+- hosts: all
+  tasks:
+    - name: Set cert_files variable
+      ansible.builtin.command: ls {{ certificates_path }}
+      register: cert_files
+
+    - name: Fetch each cert file
+      ansible.builtin.fetch:
+        src: "{{ certificates_path }}/{{ item }}"
+        dest: "{{ remote_path }}"
+      loop: "{{ cert_files.stdout_lines }}"
+  vars:
+    certificates_path: "{{ project_path }}/.secrets/lego/certificates"

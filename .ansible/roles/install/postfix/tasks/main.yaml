@@ -1,0 +1,21 @@
+- block:
+    - name: Ensure postfix is installed
+      ansible.builtin.apt:
+        name:
+          - postfix
+        update_cache: true
+
+    - name: Ensure postfix is started and enabled on boot
+      ansible.builtin.systemd_service:
+        name: postfix
+        state: started
+        enabled: true
+
+    - name: Fetch conf files
+      ansible.builtin.fetch:
+        src: "{{ item }}"
+        dest: "{{ remote_path }}"
+      loop:
+        - /etc/postfix/main.cf
+        - /etc/postfix/master.cf
+  become: true

@@ -1,0 +1,6 @@
+- name: Ensure net-tools is installed
+  ansible.builtin.apt:
+    name:
+      - net-tools
+    update_cache: true
+  become: true

@@ -1,0 +1,25 @@
+- block:
+    - name: Ensure dovecot is installed
+      ansible.builtin.apt:
+        name:
+          - dovecot-imapd
+          - dovecot-pop3d
+        update_cache: true
+
+    - name: Ensure dovecot is started and enabled on boot
+      ansible.builtin.systemd_service:
+        name: dovecot
+        state: started
+        enabled: true
+
+    - name: Fetch conf files
+      ansible.builtin.fetch:
+        src: "{{ item }}"
+        dest: "{{ remote_path }}"
+      loop:
+        - /etc/dovecot/dovecot.conf
+        - /etc/dovecot/conf.d/10-auth.conf
+        - /etc/dovecot/conf.d/10-mail.conf
+        - /etc/dovecot/conf.d/10-master.conf
+        - /etc/dovecot/conf.d/10-ssl.conf
+  become: true

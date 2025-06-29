@@ -1,0 +1,9 @@
+# イメージのビルド時に必要となるファイルは除かない
+*
+!.docker
+!.etc
+!.secrets
+!.sh
+!prisma
+!package.json
+!package-lock.json

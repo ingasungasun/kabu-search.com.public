@@ -1,0 +1,6 @@
+- name: Ensure timezone is Asia/Tokyo
+  community.general.timezone:
+    name: Asia/Tokyo
+  become: true
+  notify:
+    - Restart cron

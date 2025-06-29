@@ -1,0 +1,1 @@
+v=DMARC1; p=none; ri=604800; fo=1; rua=mailto:dmarc@kabu-search.com; ruf=mailto:dmarc@kabu-search.com;

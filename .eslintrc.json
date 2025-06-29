@@ -1,0 +1,39 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    /*
+      [implicit ignore rules]
+      node_modules/ is ignored.
+      dot-files (except for .eslintrc.*) as well as dot-folders and their contents are ignored.
+    */
+    "/public/",
+    "/next.config.js",
+    "/package-lock.json"
+  ],
+  "extends": [
+    "airbnb-base",
+    "next/core-web-vitals",
+    "plugin:import/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "import",
+    "jsx-a11y",
+    "react",
+    "react-hooks",
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "no-console": [
+      "warn",
+      {
+        "allow": ["info", "warn", "error"]
+      }
+    ]
+  }
+}

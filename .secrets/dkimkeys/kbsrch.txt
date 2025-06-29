@@ -1,0 +1,3 @@
+kbsrch._domainkey	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
+	  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2MpCLz8YM46zIRVRnpx+IwZKWGsJ6HWoJd+NPMT6BmsbJ9ekYllz44Uwfo44mW53uy1TbAg9yhTVDt+DDlDfhVm8XYPFhhE3Dvbp8ujfW7oMnXa5AQ+NRFQKOSreD4i1MkU5dG3LY8uk/hqHs4GlAaNwTkELWvXRu2Q5iTvaEcoxSMvZvO86ttqf4cVmQnkK+hEvQSiUporN20"
+	  "+1GkQl9GxFxUyciVG4moCZRUJHDeqUKLicRSN7z0VyFBGH8NJlg8wpRdaQGsTp21PbRthVnyO3kTODJgtfHahKEEWAPEiykLTI1HawTkX7Imr6Luxise9n8StydLDP0aDyVm0C2wIDAQAB" )  ; ----- DKIM key kbsrch for kabu-search.com

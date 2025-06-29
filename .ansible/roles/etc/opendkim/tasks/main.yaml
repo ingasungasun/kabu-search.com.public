@@ -1,0 +1,10 @@
+- name: Ensure opendkim.conf exists
+  ansible.builtin.copy:
+    src: "{{ project_path }}/.etc/opendkim.conf"
+    dest: /etc/opendkim.conf
+    owner: root
+    group: root
+    mode: "644"
+  notify:
+    - Restart opendkim
+  become: true

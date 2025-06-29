@@ -1,0 +1,11 @@
+/var/www/.storage/logs/*.log {
+  compress
+  copytruncate
+  dateext
+  dateformat .%Y-%m-%d
+  dateyesterday
+  missingok
+  notifempty
+  rotate 52
+  weekly
+}

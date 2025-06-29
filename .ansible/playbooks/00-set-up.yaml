@@ -1,0 +1,13 @@
+# コマンド実行時は --ask-pass --ask-vault-pass オプションを付ける。
+
+- hosts: all
+  vars:
+    ansible_user: root
+  roles:
+    - set-up/editor
+    - set-up/firewall
+    - set-up/sshd_config
+    - set-up/su
+    - set-up/sudo
+    - set-up/timezone
+    - set-up/user

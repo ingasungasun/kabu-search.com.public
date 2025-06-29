@@ -1,0 +1,4 @@
+arima:
+  hosts:
+    arima01:
+      ansible_host: arima.kabu-search.com

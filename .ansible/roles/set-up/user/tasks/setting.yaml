@@ -1,0 +1,46 @@
+- block:
+    - name: Ensure HISTSIZE is {{ HISTSIZE }}
+      ansible.builtin.lineinfile:
+        path: ~/.bashrc
+        regexp: "^HISTSIZE"
+        line: "HISTSIZE={{ HISTSIZE }}"
+
+    - name: Ensure HISTFILESIZE is {{ HISTFILESIZE }}
+      ansible.builtin.lineinfile:
+        path: ~/.bashrc
+        regexp: "^HISTFILESIZE"
+        line: "HISTFILESIZE={{ HISTFILESIZE }}"
+
+    - name: Ensure cd command is added
+      ansible.builtin.blockinfile:
+        path: ~/.bashrc
+        block: |
+          if [ -d /var/www ]; then
+            cd /var/www
+          fi
+
+    - name: Ensure .bash_aliases file exists
+      ansible.builtin.copy:
+        src: .bash_aliases
+        dest: ~/.bash_aliases
+        mode: "600"
+
+    - name: Ensure bin dir exists
+      ansible.builtin.file:
+        path: ~/bin
+        state: directory
+        mode: "700"
+
+    - name: Ensure count-items file exist
+      ansible.builtin.copy:
+        src: count-items
+        dest: ~/bin/count-items
+        mode: "700"
+
+    - name: Ensure high-loadavg file exist
+      ansible.builtin.copy:
+        src: high-loadavg
+        dest: ~/bin/high-loadavg
+        mode: "700"
+  become: true
+  become_user: "{{ item.key }}"

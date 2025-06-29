@@ -1,0 +1,14 @@
+#!/bin/bash
+
+fields=1
+delimiter=' '
+
+if [ -n "$1" ]; then
+  fields="$1"
+fi
+
+if [ -n "$2" ]; then
+  delimiter="$2"
+fi
+
+cut -d "$delimiter" -f "$fields" | sort | uniq -c | sort -nr

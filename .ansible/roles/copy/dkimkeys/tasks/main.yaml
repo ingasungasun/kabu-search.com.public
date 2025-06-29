@@ -1,0 +1,17 @@
+- block:
+    - name: Ensure dkimkeys dir exists
+      ansible.builtin.file:
+        path: /etc/dkimkeys
+        state: directory
+        owner: opendkim
+        group: opendkim
+        mode: "700"
+
+    - name: Ensure kbsrch.private file exists
+      ansible.builtin.copy:
+        src: "{{ project_path }}/.secrets/dkimkeys/kbsrch.private"
+        dest: /etc/dkimkeys/kbsrch.private
+        owner: opendkim
+        group: opendkim
+        mode: "600"
+  become: true

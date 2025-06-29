@@ -1,0 +1,7 @@
+- block:
+    - name: Ensure openjdk-21-jre is installed
+      ansible.builtin.apt:
+        name:
+          - openjdk-21-jre
+        update_cache: true
+  become: true

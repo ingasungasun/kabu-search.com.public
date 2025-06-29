@@ -1,0 +1,33 @@
+- block:
+    - name: Ensure PermitRootLogin is no
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PermitRootLogin"
+        line: "PermitRootLogin no"
+
+    - name: Ensure PubkeyAuthentication is yes
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PubkeyAuthentication"
+        line: "PubkeyAuthentication yes"
+
+    - name: Ensure AuthorizedKeysFile is .ssh/authorized_keys
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?AuthorizedKeysFile"
+        line: "AuthorizedKeysFile .ssh/authorized_keys"
+
+    - name: Ensure PasswordAuthentication is no
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PasswordAuthentication"
+        line: "PasswordAuthentication no"
+
+    - name: Ensure PermitEmptyPasswords is no
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PermitEmptyPasswords"
+        line: "PermitEmptyPasswords no"
+  become: true
+  notify:
+    - Restart ssh

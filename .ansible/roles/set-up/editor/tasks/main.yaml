@@ -1,0 +1,5 @@
+- name: Ensure alternative editor is vim.basic
+  community.general.alternatives:
+    name: editor
+    path: /usr/bin/vim.basic
+  become: true

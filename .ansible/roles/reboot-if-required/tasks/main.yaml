@@ -1,0 +1,17 @@
+- block:
+    - name: Check if reboot is required
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+
+    - name: Prompt for rebooting
+      ansible.builtin.pause:
+        prompt: "Press ENTER to reboot {{ item }} now, or Ctrl+C to abort."
+      loop: "{{ ansible_play_batch }}"
+      when: reboot_required_file.stat.exists == true
+
+    - name: Reboot machine
+      ansible.builtin.reboot:
+        msg: "Reboot initiated by Ansible"
+      when: reboot_required_file.stat.exists == true
+  become: true

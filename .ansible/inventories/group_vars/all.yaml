@@ -1,0 +1,14 @@
+ansible_user: shbtnt
+ansible_ssh_private_key_file: /var/www/.secrets/ansible/{{ ansible_host }}
+ansible_python_interpreter: /usr/bin/python3
+
+project_path: /var/www
+remote_path: "{{ project_path }}/.storage/.remote"
+allowed_ports:
+  - "22"
+  - "25"
+  - "80"
+  - "443"
+  - "465"
+  - "993"
+  - "8080"

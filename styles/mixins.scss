@@ -1,0 +1,122 @@
+@use "sass:map";
+
+$breakpoints: (
+  "xs": 0px,
+  "sm": 600px,
+  "md": 900px,
+  "lg": 1200px,
+  "xl": 1536px,
+);
+
+@mixin screenSizeIs($size) {
+  @if $size == xs {
+    @media (map.get($breakpoints, "xs") <= width < map.get($breakpoints, "sm")) {
+      @content;
+    }
+  } @else if $size == sm {
+    @media (map.get($breakpoints, "sm") <= width < map.get($breakpoints, "md")) {
+      @content;
+    }
+  } @else if $size == md {
+    @media (map.get($breakpoints, "md") <= width < map.get($breakpoints, "lg")) {
+      @content;
+    }
+  } @else if $size == lg {
+    @media (map.get($breakpoints, "lg") <= width < map.get($breakpoints, "xl")) {
+      @content;
+    }
+  } @else if $size == xl {
+    @media (map.get($breakpoints, "xl") <= width) {
+      @content;
+    }
+  } @else {
+    @error "Invalid value '#{$size}'";
+  }
+}
+
+@mixin screenSizeIsNot($size) {
+  @if $size == xs {
+    @media not (map.get($breakpoints, "xs") <= width < map.get($breakpoints, "sm")) {
+      @content;
+    }
+  } @else if $size == sm {
+    @media not (map.get($breakpoints, "sm") <= width < map.get($breakpoints, "md")) {
+      @content;
+    }
+  } @else if $size == md {
+    @media not (map.get($breakpoints, "md") <= width < map.get($breakpoints, "lg")) {
+      @content;
+    }
+  } @else if $size == lg {
+    @media not (map.get($breakpoints, "lg") <= width < map.get($breakpoints, "xl")) {
+      @content;
+    }
+  } @else if $size == xl {
+    @media not (map.get($breakpoints, "xl") <= width) {
+      @content;
+    }
+  } @else {
+    @error "Invalid value '#{$size}'";
+  }
+}
+
+@mixin screenSizeIsGreaterThanOrEqualTo($size) {
+  @if $size == xs {
+    @media (map.get($breakpoints, "xs") <= width) {
+      @content;
+    }
+  } @else if $size == sm {
+    @media (map.get($breakpoints, "sm") <= width) {
+      @content;
+    }
+  } @else if $size == md {
+    @media (map.get($breakpoints, "md") <= width) {
+      @content;
+    }
+  } @else if $size == lg {
+    @media (map.get($breakpoints, "lg") <= width) {
+      @content;
+    }
+  } @else if $size == xl {
+    @media (map.get($breakpoints, "xl") <= width) {
+      @content;
+    }
+  } @else {
+    @error "Invalid value '#{$size}'";
+  }
+}
+
+@mixin screenSizeIsLessThan($size) {
+  @if $size == xs {
+    @media (width < map.get($breakpoints, "xs")) {
+      @content;
+    }
+  } @else if $size == sm {
+    @media (width < map.get($breakpoints, "sm")) {
+      @content;
+    }
+  } @else if $size == md {
+    @media (width < map.get($breakpoints, "md")) {
+      @content;
+    }
+  } @else if $size == lg {
+    @media (width < map.get($breakpoints, "lg")) {
+      @content;
+    }
+  } @else if $size == xl {
+    @media (width < map.get($breakpoints, "xl")) {
+      @content;
+    }
+  } @else {
+    @error "Invalid value '#{$size}'";
+  }
+}
+
+@mixin noScrollbar() {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+
+  &::-webkit-scrollbar {
+    display: none; /*  Chrome, Safari and Opera */
+  }
+}

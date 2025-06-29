@@ -1,0 +1,62 @@
+- block:
+    - name: Ensure user.name exists
+      community.general.git_config:
+        name: user.name
+        value: "{{ item.value.name }}"
+        scope: global
+
+    - name: Ensure user.email exists
+      community.general.git_config:
+        name: user.email
+        value: "{{ item.value.email }}"
+        scope: global
+
+    - name: Ensure alias.b exists
+      community.general.git_config:
+        name: alias.b
+        value: branch
+        scope: global
+
+    - name: Ensure alias.ch exists
+      community.general.git_config:
+        name: alias.ch
+        value: checkout
+        scope: global
+
+    - name: Ensure alias.co exists
+      community.general.git_config:
+        name: alias.co
+        value: commit
+        scope: global
+
+    - name: Ensure alias.ls exists
+      community.general.git_config:
+        name: alias.ls
+        value: log --oneline --graph
+        scope: global
+
+    - name: Ensure alias.m exists
+      community.general.git_config:
+        name: alias.m
+        value: merge
+        scope: global
+
+    - name: Ensure alias.st exists
+      community.general.git_config:
+        name: alias.st
+        value: status
+        scope: global
+
+    - name: Ensure color.ui exists
+      community.general.git_config:
+        name: color.ui
+        value: auto
+        scope: global
+
+    - name: Ensure credential.helper exists
+      community.general.git_config:
+        name: credential.helper
+        value: store
+        scope: global
+  become: true
+  become_user: "{{ item.key }}"

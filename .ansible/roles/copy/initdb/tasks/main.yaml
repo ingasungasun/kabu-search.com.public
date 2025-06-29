@@ -1,0 +1,10 @@
+- name: Ensure sql file exists
+  ansible.builtin.copy:
+    src: "{{ project_path }}/.storage/backup/{{ file_name }}"
+    dest: "{{ project_path }}/.docker/mysql/docker-entrypoint-initdb.d/{{ file_name }}"
+    owner: shbtnt
+    group: shbtnt
+    mode: "755"
+  vars:
+    file_name: db.gz
+  become: true

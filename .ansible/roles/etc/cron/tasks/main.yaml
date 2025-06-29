@@ -1,0 +1,12 @@
+- name: Ensure {{ item }} exists in cron.d dir
+  ansible.builtin.copy:
+    src: "{{ project_path }}/.etc/cron.d/{{ item }}"
+    dest: /etc/cron.d/{{ item }}
+    owner: root
+    group: root
+    mode: "644"
+  loop:
+    - backup
+    - lego
+    - top
+  become: true

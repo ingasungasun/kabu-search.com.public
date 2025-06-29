@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /about
+Disallow: /contact
+
+Sitemap: https://kabu-search.com/sitemap.xml

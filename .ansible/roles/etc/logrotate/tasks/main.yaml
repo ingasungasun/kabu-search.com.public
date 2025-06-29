@@ -1,0 +1,8 @@
+- name: Ensure www exists
+  copy:
+    src: "{{ project_path }}/.etc/logrotate.d/www"
+    dest: /etc/logrotate.d/www
+    owner: root
+    group: root
+    mode: "644"
+  become: true
